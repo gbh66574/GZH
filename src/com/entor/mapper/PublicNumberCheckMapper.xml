@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PublicNumberCheck">
+	<insert id="add" parameterType="PublicNumberCheck">
+		insert into wxms_Public_Number_Check(user_id,pid,applyTime,advise,state,checkTime)
+		values(#{user_id},#{pid},#{applyTime},#{advise},#{state},#{checkTime})
+	</insert>
+	<insert id="addMore">
+	insert into wxms_Public_Number_Check(user_id,pid,applyTime,advise,state,checkTime)values
+	<foreach collection="list" item="s" separator=",">
+	(#{s.user_id},#{s.pid},#{s.applyTime},#{s.advise},#{s.state},#{s.checkTime})
+	</foreach>
+	</insert>
+	<update id="update" parameterType="PublicNumberCheck">
+		update wxms_Public_Number_Check set
+		user_id=#{user_id},
+		pid=#{pid},
+		applyTime=#{applyTime},
+		advise=#{advise},
+		state=#{state},
+		checkTime=#{checkTime},
+		where id=#{id}
+	</update>
+	<select id="queryById" parameterType="int" resultType="PublicNumberCheck">
+	select * from wxms_Public_Number_Check where id=#{id}
+	</select>
+	<select id="queryAll"  resultType="PublicNumberCheck">
+	select * from wxms_Public_Number_Check where id&lt;100
+	</select>
+	<select id="queryByPage" parameterType="map" resultType="PublicNumberCheck">
+	select * from wxms_Public_Number_Check limit #{start},#{pageSize}
+	</select>
+	<select id="queryByPublicNumberCheckname"   resultType="PublicNumberCheck">
+	select * from wxms_Public_Number_Check where Public_Number_Checkname like #{Public_Number_Checkname}
+	</select>
+	<select id="getTotals" resultType="int">
+	select count(*) from wxms_Public_Number_Check
+	</select>
+	<delete id="deleteById">
+	delete from wxms_Public_Number_Check where id=#{id}
+	</delete>
+	<delete id="deleteMore">
+	delete from wxms_Public_Number_Check where id in
+	<foreach collection="array" open="(" close=")" separator="," item="id">
+	#{id}
+	</foreach>
+	</delete>
+</mapper>

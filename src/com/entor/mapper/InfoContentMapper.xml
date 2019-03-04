@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InfoContent">
+	<insert id="add" parameterType="InfoContent">
+		insert into wxms_Info_Content(pid,content,tid,user_id,createTime)
+		values(#{pid},#{content},#{tid},#{user_id},#{createTime})
+	</insert>
+	<insert id="addMore">
+	insert into wxms_Info_Content(pid,content,tid,user_id,createTime)values
+	<foreach collection="list" item="s" separator=",">
+	(#{s.pid},#{s.content},#{s.tid},#{s.user_id},#{s.createTime})
+	</foreach>
+	</insert>
+	<update id="update" parameterType="InfoContent">
+		update wxms_Info_Content set
+		pid=#{pid},
+		content=#{content},
+		tid=#{tid},
+		user_id=#{user_id},
+		createTime=#{createTime},
+		where id=#{id}
+	</update>
+	<select id="queryById" parameterType="int" resultType="InfoContent">
+	select * from wxms_Info_Content where id=#{id}
+	</select>
+	<select id="queryAll"  resultType="InfoContent">
+	select * from wxms_Info_Content where id&lt;100
+	</select>
+	<select id="queryByPage" parameterType="map" resultType="InfoContent">
+	select * from wxms_Info_Content limit #{start},#{pageSize}
+	</select>
+	<select id="queryByInfoContentname"   resultType="InfoContent">
+	select * from wxms_Info_Content where Info_Contentname like #{Info_Contentname}
+	</select>
+	<select id="getTotals" resultType="int">
+	select count(*) from wxms_Info_Content
+	</select>
+	<delete id="deleteById">
+	delete from wxms_Info_Content where id=#{id}
+	</delete>
+	<delete id="deleteMore">
+	delete from wxms_Info_Content where id in
+	<foreach collection="array" open="(" close=")" separator="," item="id">
+	#{id}
+	</foreach>
+	</delete>
+</mapper>

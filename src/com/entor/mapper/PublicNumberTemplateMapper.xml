@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PublicNumberTemplate">
+	<insert id="add" parameterType="PublicNumberTemplate">
+		insert into wxms_Public_Number_Template(id,tid,pid)
+		values(#{id},#{tid},#{pid})
+	</insert>
+	<insert id="addMore">
+	insert into wxms_Public_Number_Template(id,tid,pid)values
+	<foreach collection="list" item="s" separator=",">
+	(#{s.id},#{s.tid},#{s.pid})
+	</foreach>
+	</insert>
+	<update id="update" parameterType="PublicNumberTemplate">
+		update wxms_Public_Number_Template set
+		tid=#{tid},
+		pid=#{pid}
+		where id=#{id}
+	</update>
+	<select id="queryById" parameterType="int" resultType="PublicNumberTemplate">
+	select * from wxms_Public_Number_Template where id=#{id}
+	</select>
+	<select id="queryAll"  resultType="PublicNumberTemplate">
+	select * from wxms_Public_Number_Template 
+	</select>
+	<select id="queryByPage" parameterType="map" resultType="com.entor.vo.PublicNumberTemplateVo">
+	SELECT   pnt.id,pn.public_name public_name,t.name tname  from wxms_Public_Number_Template pnt,wxms_Template t,wxms_public_number pn 
+	where  pnt.pid=pn.id and pnt.tid=t.id
+	<!-- SELECT C.* FROM  
+    (  
+    SELECT A.*, ROWNUM RN  
+    FROM (SELECT * FROM wxms_Public_Number_Template order by id) A  
+    WHERE ROWNUM &lt;= #{start}
+    )C
+    WHERE C.RN > #{b}	 -->
+    	</select>
+	<select id="queryByPublicNumberTemplatename"   resultType="PublicNumberTemplate">
+	select * from wxms_Public_Number_Template where Public_Number_Templatename like #{Public_Number_Templatename}
+	</select>
+	<select id="getTotals" resultType="int">
+	select count(*) from wxms_Public_Number_Template
+	</select>
+	<delete id="deleteById">
+	delete from wxms_Public_Number_Template where id=#{id}
+	</delete>
+	<delete id="deleteMore">
+	delete from wxms_Public_Number_Template where id in
+	<foreach collection="array" open="(" close=")" separator="," item="id">
+	#{id}
+	</foreach>
+	</delete>
+</mapper>

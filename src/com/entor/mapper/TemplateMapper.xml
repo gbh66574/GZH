@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Template">
+	<insert id="add" parameterType="Template">
+		insert into wxms_Template(id,name,content,type,remark,user_id,createTime)
+		values(#{id},#{name},#{content},#{type},#{remark},#{user_id},Sysdate)
+	</insert>
+	<insert id="addMore">
+	insert into wxms_Template(id,name,content,type,remark,user_id,createTime)values
+	<foreach collection="list" item="s" separator=",">
+	(#{s.id},#{s.name},#{s.content},#{s.type},#{s.remark},#{s.user_id},#{s.createTime})
+	</foreach>
+	</insert>
+	<update id="update" parameterType="Template">
+		update wxms_Template set
+		name=#{name},
+		content=#{content},
+		type=#{type},
+		remark=#{remark},
+		user_id=#{user_id}
+		where id=#{id}
+	</update>
+	<select id="queryById" parameterType="int" resultType="Template">
+	select * from wxms_Template where id=#{id}
+	</select>
+	<select id="queryAll"  resultType="Template">
+	select * from wxms_Template where id&lt;100
+	</select>
+	<select id="queryByPage" parameterType="map" resultType="Template">
+ 	SELECT C.* FROM  
+    (  
+    SELECT A.*, ROWNUM RN  
+    FROM (SELECT * FROM wxms_Template order by id) A  
+    WHERE ROWNUM &lt;= #{start}
+    )C
+    WHERE C.RN > #{b}	
+    </select>
+	<select id="queryByTemplatename"   resultType="Template">
+	select * from wxms_Template where Templatename like #{Templatename}
+	</select>
+	<select id="getTotals" resultType="int">
+	select count(*) from wxms_Template
+	</select>
+	<delete id="deleteById">
+	delete from wxms_Template where id=#{id}
+	</delete>
+	<delete id="deleteMore">
+	delete from wxms_Template where id in
+	<foreach collection="array" open="(" close=")" separator="," item="id">
+	#{id}
+	</foreach>
+	</delete>
+</mapper>

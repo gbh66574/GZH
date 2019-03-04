@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PublicNumberFans">
+	<insert id="add" parameterType="PublicNumberFans">
+		insert into wxms_Public_Number_Fans(pid,addFans,reduceFans,countDate)
+		values(#{pid},#{addFans},#{reduceFans},#{countDate})
+	</insert>
+	<insert id="addMore">
+	insert into wxms_Public_Number_Fans(pid,addFans,reduceFans,countDate)values
+	<foreach collection="list" item="s" separator=",">
+	(#{s.pid},#{s.addFans},#{s.reduceFans},#{s.countDate})
+	</foreach>
+	</insert>
+	<update id="update" parameterType="PublicNumberFans">
+		update wxms_Public_Number_Fans set
+		pid=#{pid},
+		addFans=#{addFans},
+		reduceFans=#{reduceFans},
+		countDate=#{countDate},
+		where id=#{id}
+	</update>
+	<select id="queryById" parameterType="int" resultType="PublicNumberFans">
+	select * from wxms_Public_Number_Fans where id=#{id}
+	</select>
+	<select id="queryAll"  resultType="PublicNumberFans">
+	select * from wxms_Public_Number_Fans where id&lt;100
+	</select>
+	<select id="queryByPage" parameterType="map" resultType="PublicNumberFans">
+	select * from wxms_Public_Number_Fans limit #{start},#{pageSize}
+	</select>
+	<select id="queryByPublicNumberFansname"   resultType="PublicNumberFans">
+	select * from wxms_Public_Number_Fans where Public_Number_Fansname like #{Public_Number_Fansname}
+	</select>
+	<select id="getTotals" resultType="int">
+	select count(*) from wxms_Public_Number_Fans
+	</select>
+	<delete id="deleteById">
+	delete from wxms_Public_Number_Fans where id=#{id}
+	</delete>
+	<delete id="deleteMore">
+	delete from wxms_Public_Number_Fans where id in
+	<foreach collection="array" open="(" close=")" separator="," item="id">
+	#{id}
+	</foreach>
+	</delete>
+</mapper>
